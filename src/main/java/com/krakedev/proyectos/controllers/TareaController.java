@@ -24,17 +24,29 @@ public class TareaController {
 	@Autowired
     private TareaService tareaService;
 
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> crearTarea(@RequestBody Tarea tarea) {
-        try {
-            Tarea nuevaTarea = tareaService.guardar(tarea);
-            return new ResponseEntity<>(nuevaTarea, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", e.getMessage()));
-        }
-    }
+	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')") // Mantiene la protección del taller
+	public ResponseEntity<?> crearTarea(@RequestBody Tarea tarea) {
+	    try {
+	        String prio = tarea.getPrioridad();
+	        
+	        // Validación estricta de la regla de negocio del examen
+	        if (prio == null || (!prio.equals("ALTA") && !prio.equals("MEDIA") && !prio.equals("BAJA"))) {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                    .body(Map.of(
+	                        "status", 400,
+	                        "error", "Validación Fallida",
+	                        "mensaje", "La prioridad de la tarea es obligatoria y debe ser estrictamente: ALTA, MEDIA o BAJA."
+	                    ));
+	        }
+	        
+	        Tarea nuevaTarea = tareaService.guardar(tarea);
+	        return new ResponseEntity<>(nuevaTarea, HttpStatus.CREATED);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(Map.of("error", e.getMessage()));
+	    }
+	}
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")

@@ -20,6 +20,9 @@ public class Tarea {
 
     @Column(name = "costo_estimado", nullable = false)
     private double costoEstimado;
+    
+    @Column(nullable = false, length = 10)
+    private String prioridad;
 
     @ManyToOne
     @JoinColumn(name = "proyecto_id", nullable = false)
@@ -86,6 +89,14 @@ public class Tarea {
 
     public void setProyecto(Proyecto proyecto) {
         this.proyecto = proyecto;
+    }
+    
+    public String getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(String prioridad) {
+        this.prioridad = prioridad;
     }
 
     public List<Empleado> getEmpleados() {
