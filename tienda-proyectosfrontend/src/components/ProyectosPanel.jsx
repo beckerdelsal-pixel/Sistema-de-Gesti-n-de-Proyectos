@@ -44,7 +44,8 @@ export const ProyectosPanel = ({ vistaActual, setVistaActual }) => {
                 },
                 body: JSON.stringify({
         nombre: nuevoProyecto.nombre, 
-        descripcion: nuevoProyecto.descripcion
+        descripcion: nuevoProyecto.descripcion,
+        fechaInicio: new Date().toISOString().split('T')[0]
     })
             });
 
