@@ -23,24 +23,25 @@ import com.krakedev.proyectos.services.ProyectoService;
 @RestController
 @RequestMapping("/api/proyectos")
 @CrossOrigin(
-    origins = "http://localhost:5173", 
-    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
-    allowedHeaders = {"Authorization", "Content-Type"}
-)
+    origins = "http://localhost:5173")
 public class ProyectoController {
 	@Autowired
     private ProyectoService proyectoService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> crearProyecto(@RequestBody Proyecto proyecto) {
+    	System.out.println("DEBUG: Proyecto recibido: " + proyecto.getNombre());
         try {
             Proyecto nuevoProyecto = proyectoService.guardar(proyecto);
+            System.out.println("EXITO");
             return new ResponseEntity<>(nuevoProyecto, HttpStatus.CREATED);
+            
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", e.getMessage()));
         }
+        
     }
 
     @GetMapping
