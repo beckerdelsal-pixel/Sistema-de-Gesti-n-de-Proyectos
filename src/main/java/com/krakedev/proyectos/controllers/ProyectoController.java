@@ -85,4 +85,15 @@ public class ProyectoController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+    
+    @GetMapping("/publico/resumen")
+    public ResponseEntity<?> obtenerResumenPublico() {
+        try {
+            long total = proyectoService.contarTotalProyectos();
+            return ResponseEntity.ok(Map.of("totalProyectos", total));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
 }
