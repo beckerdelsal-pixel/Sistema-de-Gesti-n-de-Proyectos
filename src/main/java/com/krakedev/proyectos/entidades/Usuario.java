@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Usuario {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+	private Integer id;
 
     @Column(nullable = false, unique = true, length = 50)
     private String username;
@@ -16,26 +16,26 @@ public class Usuario {
     private String password;
 
     @Column(nullable = false, length = 200)
-    private String rol; // Ejemplo: "ROLE_ADMIN" o "ROLE_USER"
+    private String rol; 
 
-    // Constructor vacío
+
     public Usuario() {
     }
 
-    // Constructor con parámetros
-    public Usuario(int id, String username, String password, String rol) {
+
+    public Usuario(Integer id, String username, String password, String rol) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.rol = rol;
     }
 
-    // Getters y Setters
-    public int getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

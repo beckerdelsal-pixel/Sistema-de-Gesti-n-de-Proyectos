@@ -2,7 +2,7 @@ package com.krakedev.proyectos.controllers;
 
 import java.util.List;
 import java.util.Map;
-
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,11 @@ import com.krakedev.proyectos.services.EmpleadoService;
 
 @RestController
 @RequestMapping("/api/empleados")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(
+    origins = "http://localhost:5173", 
+    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
+    allowedHeaders = {"Authorization", "Content-Type"}
+)
 public class EmpleadoController {
 	@Autowired
     private EmpleadoService empleadoService;

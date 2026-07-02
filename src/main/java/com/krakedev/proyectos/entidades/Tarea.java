@@ -36,11 +36,11 @@ public class Tarea {
     )
     private List<Empleado> empleados;
 
-    // Constructor vacío
+
     public Tarea() {
     }
 
-    // Constructor con parámetros
+
     public Tarea(int id, String descripcion, LocalDate fechaLimite, double costoEstimado, Proyecto proyecto, List<Empleado> empleados) {
         this.id = id;
         this.descripcion = descripcion;
@@ -50,7 +50,7 @@ public class Tarea {
         this.empleados = empleados;
     }
 
-    // Getters y Setters
+
     public int getId() {
         return id;
     }

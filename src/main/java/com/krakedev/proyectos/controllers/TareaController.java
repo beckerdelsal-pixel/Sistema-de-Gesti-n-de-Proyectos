@@ -2,7 +2,7 @@ package com.krakedev.proyectos.controllers;
 
 import java.util.List;
 import java.util.Map;
-
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +19,22 @@ import com.krakedev.proyectos.services.TareaService;
 
 @RestController
 @RequestMapping("/api/tareas")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(
+    origins = "http://localhost:5173", 
+    methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
+    allowedHeaders = {"Authorization", "Content-Type"}
+)
 public class TareaController {
 	@Autowired
     private TareaService tareaService;
 
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')") // Mantiene la protección del taller
+	@PreAuthorize("hasRole('ADMIN')") 
 	public ResponseEntity<?> crearTarea(@RequestBody Tarea tarea) {
 	    try {
 	        String prio = tarea.getPrioridad();
 	        
-	        // Validación estricta de la regla de negocio del examen
+	       
 	        if (prio == null || (!prio.equals("ALTA") && !prio.equals("MEDIA") && !prio.equals("BAJA"))) {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .body(Map.of(

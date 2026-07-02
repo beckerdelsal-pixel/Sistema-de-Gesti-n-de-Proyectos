@@ -17,22 +17,21 @@ public class SecurityConfig {
 	@Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable()) // Deshabilitado para APIs Stateless
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                // Rutas públicas de Autenticación
-                .requestMatchers("/api/auth/registrar", "/api/auth/login").permitAll()
-                // EXAMEN FINAL FASE 1.2: El endpoint resumen público también debe permitirse sin token
-                .requestMatchers("/api/proyectos/publico/resumen").permitAll()
-                // Cualquier otra solicitud requiere estar autenticado
-                .anyRequest().authenticated()
-            )
-            // Inyectamos nuestro filtro personalizado antes del filtro de Spring por defecto
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	    http.csrf(csrf -> csrf.disable()) 
+	        	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	        .authorizeHttpRequests(auth -> auth
 
-        return http.build();
-    }
+	            .requestMatchers("/api/auth/registrar", "/api/auth/login").permitAll()
+
+	            .requestMatchers("/api/proyectos/publico/resumen").permitAll()
+
+	            .anyRequest().authenticated()
+	        )
+	        
+	        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+	    return http.build();
+	}
 }

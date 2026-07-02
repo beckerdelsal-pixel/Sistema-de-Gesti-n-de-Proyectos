@@ -29,30 +29,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
 
-            try {
-                // Validar que no se encuentre en la Lista Negra (Blacklist)
-                if (!blacklistService.isTokenEnListaNegra(token)) {
-                    DecodedJWT decodedJWT = jwtUtil.verificarToken(token);
-                    String username = decodedJWT.getSubject();
-                    String rol = decodedJWT.getClaim("rol").asString();
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return; 
+        }
 
-                    if (username != null) {
-                        // El formato en Spring Security exige el prefijo "ROLE_" para usar hasRole()
-                        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + rol);
-                        
-                        UsernamePasswordAuthenticationToken authentication = 
-                                new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(authority));
-                        
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
+
+        String token = authHeader.substring(7);
+        try {
+            if (!blacklistService.isTokenEnListaNegra(token)) {
+                DecodedJWT decodedJWT = jwtUtil.verificarToken(token);
+                String username = decodedJWT.getSubject();
+                String rol = decodedJWT.getClaim("rol").asString();
+
+                if (username != null) {
+                    SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + rol);
+                    UsernamePasswordAuthenticationToken authentication = 
+                            new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(authority));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-            } catch (Exception e) {
-                // Si el token es inválido o expiró, limpiamos el contexto de seguridad
-                SecurityContextHolder.clearContext();
             }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
