@@ -15,11 +15,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-//@CrossOrigin(
-  //  origins = "http://localhost:5173", 
-    //methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
-    //allowedHeaders = {"Authorization", "Content-Type"}
-//)
+@CrossOrigin(
+    origins = "http://localhost:5173")
 public class AuthController {
 	@Autowired
     private UsuarioService usuarioService;
